@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NexusAI — All AI Models, One Place</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ══ BACKGROUND CANVAS ══ -->
+  <canvas id="grid-canvas"></canvas>
+  <div class="noise-overlay"></div>
+
+  <!-- ══ NAVBAR ══ -->
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="16,2 30,10 30,22 16,30 2,22 2,10" fill="none" stroke="url(#logoGrad)" stroke-width="1.5"/>
+            <circle cx="16" cy="16" r="4" fill="url(#logoGrad)"/>
+            <line x1="16" y1="2" x2="16" y2="12" stroke="url(#logoGrad)" stroke-width="1"/>
+            <line x1="16" y1="20" x2="16" y2="30" stroke="url(#logoGrad)" stroke-width="1"/>
+            <line x1="2" y1="10" x2="12" y2="15" stroke="url(#logoGrad)" stroke-width="1"/>
+            <line x1="20" y1="17" x2="30" y2="22" stroke="url(#logoGrad)" stroke-width="1"/>
+            <line x1="30" y1="10" x2="20" y2="15" stroke="url(#logoGrad)" stroke-width="1"/>
+            <line x1="12" y1="17" x2="2" y2="22" stroke="url(#logoGrad)" stroke-width="1"/>
+            <defs>
+              <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#00f5c8"/>
+                <stop offset="100%" stop-color="#00b4ff"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <span class="logo-text">NexusAI</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#models">Models</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#docs">Docs</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="chat.html" class="btn-ghost">Sign in</a>
+        <a href="chat.html" class="btn-primary">
+          <span>Start chatting</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#models">Models</a>
+      <a href="#features">Features</a>
+      <a href="#pricing">Pricing</a>
+      <a href="chat.html" class="btn-primary mobile-cta">Start chatting</a>
+    </div>
+  </nav>
+
+  <!-- ══ HERO ══ -->
+  <section class="hero">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      <span class="mono">10+ AI models · One unified API</span>
+    </div>
+
+    <h1 class="hero-title">
+      <span class="line-1">Every AI,</span>
+      <span class="line-2">
+        <em>One</em> Interface
+        <span class="title-accent"></span>
+      </span>
+    </h1>
+
+    <p class="hero-sub">
+      Chat with ChatGPT, Claude, DeepSeek, Grok, Gemini and more —<br />
+      compare answers, switch models mid-conversation, no switching tabs.
+    </p>
+
+    <div class="hero-actions">
+      <a href="chat.html" class="btn-primary large">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M10 2C5.58 2 2 5.58 2 10s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 3.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 15c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08C14.71 13.72 12.5 15 10 15z" fill="currentColor"/>
+        </svg>
+        Launch Free — No Card Needed
+      </a>
+      <a href="#models" class="btn-outline">
+        Explore models
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M8 3v10M3 8l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <!-- Floating terminal preview -->
+    <div class="hero-terminal">
+      <div class="terminal-bar">
+        <span class="t-dot red"></span>
+        <span class="t-dot yellow"></span>
+        <span class="t-dot green"></span>
+        <span class="t-title mono">nexusai — chat session</span>
+      </div>
+      <div class="terminal-body">
+        <div class="t-line">
+          <span class="t-model gpt">GPT-4o</span>
+          <span class="t-msg">The derivative of x² is 2x, using the power rule...</span>
+        </div>
+        <div class="t-line">
+          <span class="t-model claude">Claude</span>
+          <span class="t-msg">Here's an intuitive explanation with a geometric proof...</span>
+        </div>
+        <div class="t-line">
+          <span class="t-model deepseek">DeepSeek</span>
+          <span class="t-msg typing">f'(x) = lim<sub>h→0</sub> [(x+h)² − x²]/h = <span class="cursor-blink">▋</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- scroll indicator -->
+    <div class="scroll-hint">
+      <div class="scroll-line"></div>
+      <span class="mono">scroll</span>
+    </div>
+  </section>
+
+  <!-- ══ MODELS MARQUEE ══ -->
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <div class="marquee-item"><span class="m-dot"></span>ChatGPT</div>
+      <div class="marquee-item"><span class="m-dot c"></span>Claude</div>
+      <div class="marquee-item"><span class="m-dot d"></span>DeepSeek</div>
+      <div class="marquee-item"><span class="m-dot g"></span>Grok</div>
+      <div class="marquee-item"><span class="m-dot gem"></span>Gemini</div>
+      <div class="marquee-item"><span class="m-dot mis"></span>Mistral</div>
+      <div class="marquee-item"><span class="m-dot ll"></span>LLaMA</div>
+      <div class="marquee-item"><span class="m-dot co"></span>Command R</div>
+      <!-- duplicate for infinite scroll -->
+      <div class="marquee-item"><span class="m-dot"></span>ChatGPT</div>
+      <div class="marquee-item"><span class="m-dot c"></span>Claude</div>
+      <div class="marquee-item"><span class="m-dot d"></span>DeepSeek</div>
+      <div class="marquee-item"><span class="m-dot g"></span>Grok</div>
+      <div class="marquee-item"><span class="m-dot gem"></span>Gemini</div>
+      <div class="marquee-item"><span class="m-dot mis"></span>Mistral</div>
+      <div class="marquee-item"><span class="m-dot ll"></span>LLaMA</div>
+      <div class="marquee-item"><span class="m-dot co"></span>Command R</div>
+    </div>
+  </div>
+
+  <!-- ══ MODELS SECTION ══ -->
+  <section class="models-section" id="models">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-eyebrow mono">// supported models</p>
+        <h2>Pick your intelligence</h2>
+        <p class="section-desc">All premium models available. Bring your own API key or use ours.</p>
+      </div>
+
+      <div class="models-grid">
+
+        <div class="model-card" data-model="gpt">
+          <div class="model-card-top">
+            <div class="model-icon gpt-icon">
+              <svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="18" stroke="currentColor" stroke-width="1.5"/><path d="M13 20a7 7 0 1114 0 7 7 0 01-14 0z" fill="currentColor" opacity=".15"/><path d="M20 13v14M13 20h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </div>
+            <div class="model-meta">
+              <h3>ChatGPT</h3>
+              <span class="model-maker">OpenAI</span>
+            </div>
+            <span class="model-badge">Popular</span>
+          </div>
+          <p class="model-desc">GPT-4o, o1, o3-mini. Best for coding, reasoning, and creative tasks.</p>
+          <div class="model-stats">
+            <div class="stat"><span class="stat-label mono">Context</span><span class="stat-val">128K</span></div>
+            <div class="stat"><span class="stat-label mono">Speed</span><span class="stat-val">Fast</span></div>
+          </div>
+        </div>
+
+        <div class="model-card featured" data-model="claude">
+          <div class="featured-glow"></div>
+          <div class="model-card-top">
+            <div class="model-icon claude-icon">
+              <svg viewBox="0 0 40 40" fill="none"><polygon points="20,4 36,13 36,27 20,36 4,27 4,13" stroke="currentColor" stroke-width="1.5"/><circle cx="20" cy="20" r="5" fill="currentColor"/></svg>
+            </div>
+            <div class="model-meta">
+              <h3>Claude</h3>
+              <span class="model-maker">Anthropic</span>
+            </div>
+            <span class="model-badge featured-badge">Recommended</span>
+          </div>
+          <p class="model-desc">Claude 3.5 Sonnet & Opus. Exceptional at analysis, writing, and nuanced reasoning.</p>
+          <div class="model-stats">
+            <div class="stat"><span class="stat-label mono">Context</span><span class="stat-val">200K</span></div>
+            <div class="stat"><span class="stat-label mono">Speed</span><span class="stat-val">Fast</span></div>
+          </div>
+        </div>
+
+        <div class="model-card" data-model="deepseek">
+          <div class="model-card-top">
+            <div class="model-icon deepseek-icon">
+              <svg viewBox="0 0 40 40" fill="none"><path d="M8 20c0-6.627 5.373-12 12-12s12 5.373 12 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M32 20c0 6.627-5.373 12-12 12S8 26.627 8 20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="2 3"/><circle cx="20" cy="20" r="3" fill="currentColor"/></svg>
+            </div>
+            <div class="model-meta">
+              <h3>DeepSeek</h3>
+              <span class="model-maker">DeepSeek AI</span>
+            </div>
+            <span class="model-badge alt">Open Source</span>
+          </div>
+          <p class="model-desc">DeepSeek-V3 & R1. Incredible at math, code, and STEM reasoning tasks.</p>
+          <div class="model-stats">
+            <div class="stat"><span class="stat-label mono">Context</span><span class="stat-val">64K</span></div>
+            <div class="stat"><span class="stat-label mono">Speed</span><span class="stat-val">Fast</span></div>
+          </div>
+        </div>
+
+        <div class="model-card" data-model="grok">
+          <div class="model-card-top">
+            <div class="model-icon grok-icon">
+              <svg viewBox="0 0 40 40" fill="none"><path d="M10 10l20 20M30 10L10 30" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="20" cy="20" r="5" stroke="currentColor" stroke-width="1.5"/></svg>
+            </div>
+            <div class="model-meta">
+              <h3>Grok</h3>
+              <span class="model-maker">xAI</span>
+            </div>
+            <span class="model-badge">Live Data</span>
+          </div>
+          <p class="model-desc">Grok-2. Access to real-time X data, witty personality, web search built-in.</p>
+          <div class="model-stats">
+            <div class="stat"><span class="stat-label mono">Context</span><span class="stat-val">128K</span></div>
+            <div class="stat"><span class="stat-label mono">Speed</span><span class="stat-val">Fast</span></div>
+          </div>
+        </div>
+
+        <div class="model-card" data-model="gemini">
+          <div class="model-card-top">
+            <div class="model-icon gemini-icon">
+              <svg viewBox="0 0 40 40" fill="none"><path d="M20 6c0 7.732-6.268 14-14 14 7.732 0 14 6.268 14 14 0-7.732 6.268-14 14-14-7.732 0-14-6.268-14-14z" fill="currentColor" opacity=".6"/><path d="M20 6c0 7.732-6.268 14-14 14 7.732 0 14 6.268 14 14 0-7.732 6.268-14 14-14-7.732 0-14-6.268-14-14z" stroke="currentColor" stroke-width="1"/></svg>
+            </div>
+            <div class="model-meta">
+              <h3>Gemini</h3>
+              <span class="model-maker">Google</span>
+            </div>
+            <span class="model-badge alt">Multimodal</span>
+          </div>
+          <p class="model-desc">Gemini 1.5 Pro. Google's most capable model with native multimodal understanding.</p>
+          <div class="model-stats">
+            <div class="stat"><span class="stat-label mono">Context</span><span class="stat-val">1M</span></div>
+            <div class="stat"><span class="stat-label mono">Speed</span><span class="stat-val">Fast</span></div>
+          </div>
+        </div>
+
+        <div class="model-card" data-model="mistral">
+          <div class="model-card-top">
+            <div class="model-icon mistral-icon">
+              <svg viewBox="0 0 40 40" fill="none"><rect x="8" y="8" width="10" height="10" rx="1" fill="currentColor" opacity=".8"/><rect x="22" y="8" width="10" height="10" rx="1" fill="currentColor" opacity=".5"/><rect x="8" y="22" width="10" height="10" rx="1" fill="currentColor" opacity=".5"/><rect x="22" y="22" width="10" height="10" rx="1" fill="currentColor" opacity=".3"/></svg>
+            </div>
+            <div class="model-meta">
+              <h3>Mistral</h3>
+              <span class="model-maker">Mistral AI</span>
+            </div>
+            <span class="model-badge alt">European</span>
+          </div>
+          <p class="model-desc">Mistral Large 2. Privacy-focused European model, excellent at multilingual tasks.</p>
+          <div class="model-stats">
+            <div class="stat"><span class="stat-label mono">Context</span><span class="stat-val">128K</span></div>
+            <div class="stat"><span class="stat-label mono">Speed</span><span class="stat-val">Fast</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FEATURES ══ -->
+  <section class="features-section" id="features">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-eyebrow mono">// why nexusai</p>
+        <h2>Built different</h2>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card large-card">
+          <div class="feature-visual compare-visual">
+            <div class="compare-col">
+              <div class="cmp-header mono">GPT-4o</div>
+              <div class="cmp-bubble">Photosynthesis converts light into chemical energy stored as glucose...</div>
+            </div>
+            <div class="cmp-divider"></div>
+            <div class="compare-col">
+              <div class="cmp-header mono">Claude 3.5</div>
+              <div class="cmp-bubble alt">Plants act like solar panels, but instead of electricity they make sugar...</div>
+            </div>
+          </div>
+          <div class="feature-content">
+            <div class="feature-icon">⟷</div>
+            <h3>Side-by-side Compare</h3>
+            <p>Ask the same question to multiple models simultaneously. See answers in parallel and pick the best one.</p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🔑</div>
+          <h3>Your Keys, Your Control</h3>
+          <p>Use your own API keys. We never store them — they live only in your browser session.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>Instant Model Switch</h3>
+          <p>Switch models mid-conversation without losing context. Continue where you left off.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">📂</div>
+          <h3>Chat History</h3>
+          <p>All conversations stored locally. Export to Markdown, JSON, or PDF anytime.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🌐</div>
+          <h3>No Lock-in</h3>
+          <p>Open source core. Self-host it, fork it, or use our hosted version. Always your choice.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ CTA ══ -->
+  <section class="cta-section">
+    <div class="cta-inner">
+      <div class="cta-glow"></div>
+      <p class="section-eyebrow mono" style="text-align:center">// get started today</p>
+      <h2>Stop switching tabs.<br/>Start thinking better.</h2>
+      <p class="cta-sub">Free tier includes GPT-3.5, Claude Haiku, and DeepSeek. No credit card.</p>
+      <a href="chat.html" class="btn-primary large">
+        Open NexusAI
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <path d="M3.75 9h10.5M9.75 4.5L14.25 9l-4.5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- ══ FOOTER ══ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <span class="logo-text">NexusAI</span>
+          <p class="mono" style="font-size:0.75rem; opacity:0.4; margin-top:0.5rem">All AI. One interface.</p>
+        </div>
+        <div class="footer-links">
+          <div class="footer-col">
+            <h4>Product</h4>
+            <a href="chat.html">Chat</a>
+            <a href="#models">Models</a>
+            <a href="#features">Features</a>
+          </div>
+          <div class="footer-col">
+            <h4>Developers</h4>
+            <a href="#">API Docs</a>
+            <a href="#">GitHub</a>
+            <a href="#">Self-host</a>
+          </div>
+          <div class="footer-col">
+            <h4>Company</h4>
+            <a href="#">About</a>
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span class="mono">© 2025 NexusAI — Open source AI aggregator</span>
+        <div class="footer-socials">
+          <a href="#" aria-label="GitHub">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+          </a>
+          <a href="#" aria-label="Twitter/X">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ── Animated grid canvas ──
+    const canvas = document.getElementById('grid-canvas');
+    const ctx = canvas.getContext('2d');
+    let W, H;
+
+    function resize() {
+      W = canvas.width = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    const COLS = 28, ROWS = 18;
+    let cells = [];
+
+    for (let r = 0; r < ROWS; r++) {
+      for (let c = 0; c < COLS; c++) {
+        cells.push({ r, c, alpha: Math.random() * 0.15, speed: 0.003 + Math.random() * 0.008, dir: Math.random() > 0.5 ? 1 : -1 });
+      }
+    }
+
+    function drawGrid() {
+      ctx.clearRect(0, 0, W, H);
+      const cw = W / COLS, ch = H / ROWS;
+      ctx.strokeStyle = 'rgba(0,245,200,0.06)';
+      ctx.lineWidth = 0.5;
+
+      // vertical lines
+      for (let c = 0; c <= COLS; c++) {
+        ctx.beginPath();
+        ctx.moveTo(c * cw, 0);
+        ctx.lineTo(c * cw, H);
+        ctx.stroke();
+      }
+      // horizontal lines
+      for (let r = 0; r <= ROWS; r++) {
+        ctx.beginPath();
+        ctx.moveTo(0, r * ch);
+        ctx.lineTo(W, r * ch);
+        ctx.stroke();
+      }
+
+      // glowing cells
+      cells.forEach(cell => {
+        cell.alpha += cell.speed * cell.dir;
+        if (cell.alpha > 0.18 || cell.alpha < 0) cell.dir *= -1;
+        const x = cell.c * cw, y = cell.r * ch;
+        ctx.fillStyle = `rgba(0,245,200,${Math.max(0, cell.alpha)})`;
+        ctx.fillRect(x + 1, y + 1, cw - 2, ch - 2);
+      });
+      requestAnimationFrame(drawGrid);
+    }
+    drawGrid();
+
+    // ── Hamburger ──
+    document.getElementById('hamburger').addEventListener('click', () => {
+      document.getElementById('mobileMenu').classList.toggle('open');
+    });
+
+    // ── Scroll reveal ──
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.model-card, .feature-card, .section-header').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
